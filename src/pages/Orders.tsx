@@ -236,7 +236,7 @@ const Orders: React.FC = () => {
   }, [statusFilter, minAmount, maxAmount, searchTerm, sortField, sortDirection]);
 
   const dateElement = (
-    <span className="text-xs sm:text-sm text-gray-500 px-3 py-2 bg-white rounded-md whitespace-nowrap">
+    <span className="text-xs sm:text-sm text-gray-500 px-3 py-2 bg-white rounded-md whitespace-nowrap flex-shrink-0 mb-2 sm:mb-0">
       <span className="material-icons-outlined text-xs align-middle mr-1">calendar_today</span>
       Сегодня, {new Date().toLocaleDateString('ru-RU')}
     </span>

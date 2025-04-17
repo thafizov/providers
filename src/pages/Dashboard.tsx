@@ -5,58 +5,176 @@ interface CardStats {
   id: string;
   cardId: string;
   bankName: string;
-  dailyPayments: number;
-  successRate: number;
-  failedRate: number;
+  successOrders: number;
+  failedOrders: number;
+  turnover: number;
   balance: number;
 }
 
 // Примерные данные для демонстрации
-const mockCardStats: CardStats[] = [
-  {
-    id: '1',
-    cardId: '1278',
-    bankName: 'Сбер',
-    dailyPayments: 42,
-    successRate: 95,
-    failedRate: 5,
-    balance: 156800,
-  },
-  {
-    id: '2',
-    cardId: '5678',
-    bankName: 'Альфа',
-    dailyPayments: 27,
-    successRate: 88,
-    failedRate: 12,
-    balance: 98500,
-  },
-  {
-    id: '3',
-    cardId: '9012',
-    bankName: 'Тинькофф',
-    dailyPayments: 35,
-    successRate: 92,
-    failedRate: 8,
-    balance: 124300,
-  },
-  {
-    id: '4',
-    cardId: '3456',
-    bankName: 'ВТБ',
-    dailyPayments: 19,
-    successRate: 100,
-    failedRate: 0,
-    balance: 76200,
-  },
-];
-
-// Сводная статистика
-const totalDailyPayments = mockCardStats.reduce((sum, card) => sum + card.dailyPayments, 0);
-const totalBalance = mockCardStats.reduce((sum, card) => sum + card.balance, 0);
-const avgSuccessRate = Math.round(
-  mockCardStats.reduce((sum, card) => sum + card.successRate, 0) / mockCardStats.length
-);
+const mockCardStats: Record<string, CardStats[]> = {
+  day: [
+    {
+      id: '1',
+      cardId: '1278',
+      bankName: 'Сбер',
+      successOrders: 42,
+      failedOrders: 2,
+      turnover: 156800,
+      balance: 356800,
+    },
+    {
+      id: '2',
+      cardId: '5678',
+      bankName: 'Альфа',
+      successOrders: 27,
+      failedOrders: 3,
+      turnover: 98500,
+      balance: 248500,
+    },
+    {
+      id: '3',
+      cardId: '9012',
+      bankName: 'Тинькофф',
+      successOrders: 35,
+      failedOrders: 3,
+      turnover: 124300,
+      balance: 524300,
+    },
+  ],
+  week: [
+    {
+      id: '1',
+      cardId: '1278',
+      bankName: 'Сбер',
+      successOrders: 152,
+      failedOrders: 8,
+      turnover: 856800,
+      balance: 356800,
+    },
+    {
+      id: '2',
+      cardId: '5678',
+      bankName: 'Альфа',
+      successOrders: 97,
+      failedOrders: 12,
+      turnover: 398500,
+      balance: 248500,
+    },
+    {
+      id: '3',
+      cardId: '9012',
+      bankName: 'Тинькофф',
+      successOrders: 105,
+      failedOrders: 9,
+      turnover: 624300,
+      balance: 524300,
+    },
+    {
+      id: '4',
+      cardId: '3456',
+      bankName: 'ВТБ',
+      successOrders: 87,
+      failedOrders: 5,
+      turnover: 476200,
+      balance: 176200,
+    },
+  ],
+  month: [
+    {
+      id: '1',
+      cardId: '1278',
+      bankName: 'Сбер',
+      successOrders: 352,
+      failedOrders: 18,
+      turnover: 2856800,
+      balance: 356800,
+    },
+    {
+      id: '2',
+      cardId: '5678',
+      bankName: 'Альфа',
+      successOrders: 297,
+      failedOrders: 22,
+      turnover: 1398500,
+      balance: 248500,
+    },
+    {
+      id: '3',
+      cardId: '9012',
+      bankName: 'Тинькофф',
+      successOrders: 305,
+      failedOrders: 19,
+      turnover: 1624300,
+      balance: 524300,
+    },
+    {
+      id: '4',
+      cardId: '3456',
+      bankName: 'ВТБ',
+      successOrders: 287,
+      failedOrders: 15,
+      turnover: 1476200,
+      balance: 176200,
+    },
+    {
+      id: '5',
+      cardId: '7891',
+      bankName: 'Газпромбанк',
+      successOrders: 187,
+      failedOrders: 12,
+      turnover: 876200,
+      balance: 276200,
+    },
+  ],
+  all: [
+    {
+      id: '1',
+      cardId: '1278',
+      bankName: 'Сбер',
+      successOrders: 952,
+      failedOrders: 48,
+      turnover: 12856800,
+      balance: 356800,
+    },
+    {
+      id: '2',
+      cardId: '5678',
+      bankName: 'Альфа',
+      successOrders: 597,
+      failedOrders: 62,
+      turnover: 7398500,
+      balance: 248500,
+    },
+    {
+      id: '3',
+      cardId: '9012',
+      bankName: 'Тинькофф',
+      successOrders: 805,
+      failedOrders: 49,
+      turnover: 8624300,
+      balance: 524300,
+    },
+    {
+      id: '4',
+      cardId: '3456',
+      bankName: 'ВТБ',
+      successOrders: 687,
+      failedOrders: 35,
+      turnover: 6476200,
+      balance: 176200,
+    },
+    {
+      id: '5',
+      cardId: '7891',
+      bankName: 'Газпромбанк',
+      successOrders: 487,
+      failedOrders: 32,
+      turnover: 4876200,
+      balance: 276200,
+    },
+  ]
+};
 
 // Цвета для карточек разных банков
 const bankColors: Record<string, { bg: string, accent: string, logo: string }> = {
@@ -80,64 +198,81 @@ const bankColors: Record<string, { bg: string, accent: string, logo: string }> =
     accent: 'bg-blue-500',
     logo: 'bg-blue-600'
   },
+  'Газпромбанк': { 
+    bg: 'from-indigo-50 to-indigo-100',
+    accent: 'bg-indigo-500',
+    logo: 'bg-indigo-600'
+  },
 };
 
-const StatCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
+type TimePeriod = 'day' | 'week' | 'month' | 'all';
+
+const BankCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
   const colors = bankColors[stats.bankName] || { 
     bg: 'from-gray-50 to-gray-100',
     accent: 'bg-gray-500',
     logo: 'bg-gray-600'
   };
   
+  const formatAmount = (amount: number) => {
+    if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(1)} млн ₽`;
+    } else if (amount >= 1000) {
+      return `${(amount / 1000).toFixed(1)} тыс ₽`;
+    } else {
+      return `${amount} ₽`;
+    }
+  };
+
   return (
-    <div className={`bg-gradient-to-br ${colors.bg} rounded-xl shadow-sm overflow-hidden h-full transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-gray-100`}>
-      <div className="p-4 sm:p-5 h-full flex flex-col">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden w-full border border-gray-100 h-full">
+      <div className="p-4 sm:p-5 flex flex-col h-full">
         <div className="mb-3 sm:mb-4 flex items-center justify-between">
           <div className="flex items-center">
-            <div className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-md text-white ${colors.logo} mr-2 sm:mr-3`}>
+            <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-md text-white ${colors.logo} mr-2 sm:mr-3`}>
               {stats.bankName.charAt(0)}
             </div>
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 truncate max-w-[120px] sm:max-w-full">
-              {stats.bankName} {stats.cardId}
-            </h3>
-          </div>
-          <span className={`px-2 py-1 ${colors.accent} text-white text-xs font-medium rounded-md whitespace-nowrap`}>
-            {stats.dailyPayments} платежей
-          </span>
-        </div>
-        
-        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-5">
-          <div className="relative pt-1">
-            <div className="flex items-center justify-between mb-1">
-              <div className="text-xs font-medium text-gray-500">Успешные</div>
-              <div className="text-xs font-semibold text-green-600">{stats.successRate}%</div>
-            </div>
-            <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-100">
-              <div 
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
-                style={{ width: `${stats.successRate}%` }}
-              ></div>
-            </div>
-          </div>
-          
-          <div className="relative pt-1">
-            <div className="flex items-center justify-between mb-1">
-              <div className="text-xs font-medium text-gray-500">Неудачные</div>
-              <div className="text-xs font-semibold text-red-600">{stats.failedRate}%</div>
-            </div>
-            <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-100">
-              <div 
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-                style={{ width: `${stats.failedRate}%` }}
-              ></div>
+            <div>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                {stats.bankName} {stats.cardId}
+              </h3>
             </div>
           </div>
         </div>
         
-        <div className="mt-auto pt-3 sm:pt-5 border-t border-gray-200">
-          <div className="text-xs sm:text-sm text-gray-500 mb-1">Текущий баланс</div>
+        {/* Баланс (самый важный показатель) */}
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+          <div className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Текущий баланс</div>
           <div className="text-xl sm:text-2xl font-bold text-gray-900">
-            {stats.balance.toLocaleString('ru-RU')} ₽
+            {formatAmount(stats.balance)}
+          </div>
+        </div>
+        
+        {/* Оборот */}
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-1">
+            <div className="text-xs sm:text-sm font-medium text-gray-500">Оборот</div>
+            <div className="text-base sm:text-lg font-semibold text-gray-800">{formatAmount(stats.turnover)}</div>
+          </div>
+          <div className="w-full bg-gray-100 rounded-full h-1">
+            <div 
+              className={`${colors.accent} h-1 rounded-full`} 
+              style={{ width: `${Math.min(100, stats.turnover / 500000 * 100)}%` }}
+            ></div>
+          </div>
+        </div>
+        
+        {/* Количество ордеров */}
+        <div className="mt-auto">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="bg-green-50 p-2 rounded-lg h-16 flex flex-col justify-center">
+              <div className="text-2xs sm:text-xs text-green-600 mb-1">Успешные</div>
+              <div className="text-sm sm:text-base font-semibold text-green-700">{stats.successOrders}</div>
+            </div>
+            <div className="bg-red-50 p-2 rounded-lg h-16 flex flex-col justify-center">
+              <div className="text-2xs sm:text-xs text-red-600 mb-1">Неуспешные</div>
+              <div className="text-sm sm:text-base font-semibold text-red-700">{stats.failedOrders}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -145,115 +280,184 @@ const StatCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
   );
 };
 
-const SummaryCard: React.FC<{ title: string; value: string; icon: string; color: string }> = ({ 
-  title, value, icon, color 
+const SummaryCard: React.FC<{ 
+  title: string; 
+  value: string; 
+  icon: string; 
+  color: string;
+  subValue?: string;
+  subLabel?: string;
+}> = ({ 
+  title, 
+  value, 
+  icon, 
+  color,
+  subValue,
+  subLabel
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 transition-all duration-200 hover:shadow-lg">
-      <div className="flex items-center">
-        <div className={`p-2 sm:p-3 rounded-lg ${color}`}>
+    <div className="bg-white rounded-xl shadow-sm p-4 sm:p-5 w-full h-full flex flex-col">
+      <div className="flex items-start">
+        <div className={`p-2 sm:p-3 rounded-lg ${color} flex-shrink-0`}>
           <span className="material-icons-outlined text-white text-base sm:text-xl">{icon}</span>
         </div>
-        <div className="ml-3 sm:ml-4">
+        <div className="ml-3 sm:ml-4 min-w-0 flex-1">
           <h3 className="text-xs sm:text-sm font-medium text-gray-500">{title}</h3>
-          <p className="text-lg sm:text-xl font-bold text-gray-900">{value}</p>
+          <p className="text-lg sm:text-xl font-bold text-gray-900 truncate">{value}</p>
+          {subValue && subLabel && (
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">
+              <span className="font-medium">{subValue}</span> {subLabel}
+            </p>
+          )}
         </div>
       </div>
+    </div>
+  );
+};
+
+const TimePeriodSelector: React.FC<{
+  currentPeriod: TimePeriod;
+  onChange: (period: TimePeriod) => void;
+}> = ({ currentPeriod, onChange }) => {
+  return (
+    <div className="inline-flex bg-white rounded-lg shadow-sm overflow-hidden flex-shrink-0 max-w-full">
+      <button 
+        onClick={() => onChange('day')}
+        className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${
+          currentPeriod === 'day' 
+            ? 'bg-blue-50 text-blue-600' 
+            : 'text-gray-700 hover:bg-gray-50'
+        }`}
+      >
+        Сегодня
+      </button>
+      <button 
+        onClick={() => onChange('week')}
+        className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${
+          currentPeriod === 'week' 
+            ? 'bg-blue-50 text-blue-600' 
+            : 'text-gray-700 hover:bg-gray-50'
+        }`}
+      >
+        Неделя
+      </button>
+      <button 
+        onClick={() => onChange('month')}
+        className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${
+          currentPeriod === 'month' 
+            ? 'bg-blue-50 text-blue-600' 
+            : 'text-gray-700 hover:bg-gray-50'
+        }`}
+      >
+        Месяц
+      </button>
+      <button 
+        onClick={() => onChange('all')}
+        className={`px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${
+          currentPeriod === 'all' 
+            ? 'bg-blue-50 text-blue-600' 
+            : 'text-gray-700 hover:bg-gray-50'
+        }`}
+      >
+        Всё время
+      </button>
     </div>
   );
 };
 
 const Dashboard: React.FC = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentPeriod, setCurrentPeriod] = useState<TimePeriod>('day');
+  const [showDatePicker, setShowDatePicker] = useState(false);
   
-  const handlePrevDay = () => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(newDate.getDate() - 1);
-    setCurrentDate(newDate);
+  const handlePeriodChange = (period: TimePeriod) => {
+    setCurrentPeriod(period);
   };
   
-  const handleNextDay = () => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(newDate.getDate() + 1);
-    
-    // Не позволяем выбрать дату из будущего
-    if (newDate <= new Date()) {
-      setCurrentDate(newDate);
-    }
+  // Получаем статистику для текущего выбранного периода
+  const currentStats = mockCardStats[currentPeriod];
+  
+  // Вычисляем сводные данные для текущего периода
+  const totalTurnover = currentStats.reduce((sum, card) => sum + card.turnover, 0);
+  const totalSuccessOrders = currentStats.reduce((sum, card) => sum + card.successOrders, 0);
+  const totalFailedOrders = currentStats.reduce((sum, card) => sum + card.failedOrders, 0);
+  const totalBalance = currentStats.reduce((sum, card) => sum + card.balance, 0);
+  
+  // Форматирование суммы для сводных карточек
+  const formatTotal = (amount: number) => {
+    return amount.toLocaleString('ru-RU') + ' ₽';
   };
   
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  };
-  
-  const isToday = (date: Date) => {
-    const today = new Date();
-    return date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear();
-  };
-  
-  const dateElement = (
-    <div className="flex items-center text-sm bg-white rounded-lg shadow-sm">
+  // Компонент для периода времени в заголовке
+  const periodElement = (
+    <div className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+      <TimePeriodSelector 
+        currentPeriod={currentPeriod} 
+        onChange={handlePeriodChange} 
+      />
       <button 
-        onClick={handlePrevDay}
-        className="px-2 sm:px-3 py-2 hover:bg-gray-50 rounded-l-lg transition-colors"
-        aria-label="Предыдущий день"
+        onClick={() => setShowDatePicker(!showDatePicker)}
+        className="flex items-center text-xs sm:text-sm bg-white rounded-lg shadow-sm px-3 py-2 text-gray-700 hover:bg-gray-50 whitespace-nowrap flex-shrink-0"
       >
-        <span className="material-icons-outlined text-gray-500">chevron_left</span>
-      </button>
-      
-      <span className="px-2 sm:px-3 py-2 font-medium text-xs sm:text-sm truncate max-w-[130px] sm:max-w-none">
-        {isToday(currentDate) ? 'Сегодня' : formatDate(currentDate)}
-      </span>
-      
-      <button 
-        onClick={handleNextDay}
-        className={`px-2 sm:px-3 py-2 rounded-r-lg transition-colors ${
-          isToday(currentDate) ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-50 text-gray-500'
-        }`}
-        disabled={isToday(currentDate)}
-        aria-label="Следующий день"
-      >
-        <span className="material-icons-outlined">chevron_right</span>
+        <span className="material-icons-outlined mr-1 text-gray-500 text-sm">date_range</span>
+        <span>Выбрать дату</span>
       </button>
     </div>
   );
 
   return (
     <div>
-      <PageHeader title="Дашборд" actions={dateElement} />
+      <PageHeader title="Дашборд" actions={periodElement} />
       
       {/* Summary cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-        <SummaryCard
-          title="Всего транзакций сегодня"
-          value={`${totalDailyPayments}`}
-          icon="payments"
-          color="bg-blue-500"
-        />
-        <SummaryCard
-          title="Общий баланс"
-          value={`${totalBalance.toLocaleString('ru-RU')} ₽`}
-          icon="account_balance"
-          color="bg-purple-500"
-        />
-        <SummaryCard
-          title="Средний % успешных платежей"
-          value={`${avgSuccessRate}%`}
-          icon="verified"
-          color="bg-green-500"
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="h-full">
+          <SummaryCard
+            title="Оборот"
+            value={formatTotal(totalTurnover)}
+            subValue={`${currentStats.length}`}
+            subLabel="активных карт"
+            icon="payments"
+            color="bg-blue-500"
+          />
+        </div>
+        <div className="h-full">
+          <SummaryCard
+            title="Успешные операции"
+            value={`${totalSuccessOrders}`}
+            subValue={`${(totalSuccessOrders / (totalSuccessOrders + totalFailedOrders) * 100).toFixed(1)}%`}
+            subLabel="успешных транзакций"
+            icon="check_circle"
+            color="bg-green-500"
+          />
+        </div>
+        <div className="h-full">
+          <SummaryCard
+            title="Неуспешные операции"
+            value={`${totalFailedOrders}`}
+            icon="error"
+            color="bg-red-500"
+          />
+        </div>
+        <div className="h-full">
+          <SummaryCard
+            title="Общий баланс"
+            value={formatTotal(totalBalance)}
+            icon="account_balance"
+            color="bg-purple-500"
+          />
+        </div>
       </div>
       
-      {/* Bank cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
-        {mockCardStats.map(card => (
-          <StatCard key={card.id} stats={card} />
+      {/* Bank Cards heading */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-800">Карты банков</h2>
+        <div className="text-sm text-gray-500">Всего: {currentStats.length}</div>
+      </div>
+      
+      {/* Bank Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {currentStats.map(card => (
+          <BankCard key={card.id} stats={card} />
         ))}
       </div>
     </div>

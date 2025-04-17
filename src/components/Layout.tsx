@@ -33,7 +33,7 @@ const Layout: React.FC = () => {
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState('fadeIn');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   useEffect(() => {
     if (location !== displayLocation) {
       setTransitionStage('fadeOut');
@@ -66,8 +66,8 @@ const Layout: React.FC = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
-      {/* Mobile Header */}
-      <div className="md:hidden bg-white p-4 flex items-center justify-between shadow-md z-20">
+      {/* Mobile Header - Fixed */}
+      <div className="md:hidden bg-white p-4 flex items-center justify-between shadow-md fixed top-0 left-0 right-0 z-30">
         <div className="flex items-center">
           <button
             onClick={toggleMobileMenu}
@@ -78,7 +78,7 @@ const Layout: React.FC = () => {
               {isMobileMenuOpen ? 'close' : 'menu'}
             </span>
           </button>
-          <img src="/logo.svg" alt="Providers CSBP Logo" className="h-8" />
+          <img src="logo.svg" alt="Providers CSBP Logo" className="h-8" />
         </div>
         
         <div className="flex items-center">
@@ -89,13 +89,13 @@ const Layout: React.FC = () => {
       </div>
       
       {/* Sidebar */}
-      <div className={`fixed inset-0 md:relative md:inset-auto md:translate-x-0 md:w-64 bg-white shadow-lg md:shadow-md flex flex-col z-10 transition-transform duration-300 md:h-screen overflow-y-auto ${
+      <div className={`fixed inset-0 md:relative md:inset-auto md:translate-x-0 md:w-64 bg-white shadow-lg md:shadow-md flex flex-col z-20 transition-transform duration-300 md:h-screen overflow-y-auto ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex-1 p-4">
           {/* Logo and User Profile - Desktop */}
           <div className="hidden md:flex justify-between items-center mb-6">
-            <img src="/logo.svg" alt="Providers CSBP Logo" className="h-10" />
+            <img src="logo.svg" alt="Providers CSBP Logo" className="h-10" />
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600">
               <span className="material-icons-outlined">account_circle</span>
             </div>
@@ -160,14 +160,14 @@ const Layout: React.FC = () => {
       {/* Overlay for mobile menu */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-0 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
           onClick={toggleMobileMenu}
           aria-hidden="true"
         />
       )}
       
       {/* Main content with transition */}
-      <div className="flex-1 overflow-auto p-4 md:p-6 md:h-screen">
+      <div className="flex-1 overflow-auto md:p-6 md:h-screen pt-20 p-4 md:pt-6">
         <div
           className={`transition-opacity duration-300 ease-in-out ${
             transitionStage === 'fadeIn' ? 'opacity-100' : 'opacity-0'

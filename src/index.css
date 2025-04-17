@@ -12,22 +12,28 @@
   --text-primary: #111827; /* gray-900 */
   --text-secondary: #6b7280; /* gray-500 */
   --background: #f9fafb; /* gray-50 */
+  --mobile-header-height: 64px; /* Высота мобильной шапки */
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Убираем подсветку при тапе на мобильных */
 }
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
   @apply bg-gray-50 text-gray-900 font-sans;
   min-height: 100vh;
   overflow-x: hidden;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;  /* Сглаживание шрифтов */
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Полосы прокрутки */
@@ -48,6 +54,14 @@ body {
   @apply bg-gray-400;
 }
 
+/* На мобильных устройствах скрываем полосу прокрутки */
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}
+
 /* Эффекты карточек */
 .card {
   @apply bg-white rounded-lg shadow-sm transition-all duration-200;
@@ -60,6 +74,30 @@ body {
 /* Фокус для доступности */
 button:focus-visible, a:focus-visible {
   @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-white;
+}
+
+/* Улучшения для touch-устройств */
+@media (hover: none) {
+  .hover\:bg-gray-50:hover {
+    background-color: transparent !important;
+  }
+  
+  .hover\:shadow-md:hover {
+    box-shadow: none !important;
+  }
+  
+  .hover\:-translate-y-1:hover {
+    transform: none !important;
+  }
+  
+  /* Активные состояния для touch */
+  .active\:bg-gray-50:active {
+    @apply bg-gray-50;
+  }
+  
+  .active\:shadow-md:active {
+    @apply shadow-md;
+  }
 }
 
 /* Анимации переходов */
@@ -93,4 +131,26 @@ button:focus-visible, a:focus-visible {
 
 .animate-fade-in-down {
   animation: fadeInDown 0.3s ease-out forwards;
+}
+
+/* Улучшения для адаптивности на iOS и Android */
+@media screen and (max-width: 390px) {
+  .text-xl {
+    font-size: 1.1rem;
+  }
+  
+  .text-lg {
+    font-size: 1rem;
+  }
+  
+  .p-4 {
+    padding: 0.875rem;
+  }
+}
+
+/* Fix для iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
 } 

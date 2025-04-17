@@ -91,22 +91,22 @@ const StatCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
   
   return (
     <div className={`bg-gradient-to-br ${colors.bg} rounded-xl shadow-sm overflow-hidden h-full transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-gray-100`}>
-      <div className="p-5 h-full flex flex-col">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="p-4 sm:p-5 h-full flex flex-col">
+        <div className="mb-3 sm:mb-4 flex items-center justify-between">
           <div className="flex items-center">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-md text-white ${colors.logo} mr-3`}>
+            <div className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-md text-white ${colors.logo} mr-2 sm:mr-3`}>
               {stats.bankName.charAt(0)}
             </div>
-            <h3 className="text-lg font-semibold text-gray-800">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 truncate max-w-[120px] sm:max-w-full">
               {stats.bankName} {stats.cardId}
             </h3>
           </div>
-          <span className={`px-2 py-1 ${colors.accent} text-white text-xs font-medium rounded-md`}>
+          <span className={`px-2 py-1 ${colors.accent} text-white text-xs font-medium rounded-md whitespace-nowrap`}>
             {stats.dailyPayments} платежей
           </span>
         </div>
         
-        <div className="space-y-4 mb-5">
+        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-5">
           <div className="relative pt-1">
             <div className="flex items-center justify-between mb-1">
               <div className="text-xs font-medium text-gray-500">Успешные</div>
@@ -134,9 +134,9 @@ const StatCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
           </div>
         </div>
         
-        <div className="mt-auto pt-5 border-t border-gray-200">
-          <div className="text-sm text-gray-500 mb-1">Текущий баланс</div>
-          <div className="text-2xl font-bold text-gray-900">
+        <div className="mt-auto pt-3 sm:pt-5 border-t border-gray-200">
+          <div className="text-xs sm:text-sm text-gray-500 mb-1">Текущий баланс</div>
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">
             {stats.balance.toLocaleString('ru-RU')} ₽
           </div>
         </div>
@@ -149,14 +149,14 @@ const SummaryCard: React.FC<{ title: string; value: string; icon: string; color:
   title, value, icon, color 
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-5 transition-all duration-200 hover:shadow-lg">
+    <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 transition-all duration-200 hover:shadow-lg">
       <div className="flex items-center">
-        <div className={`p-3 rounded-lg ${color}`}>
-          <span className="material-icons-outlined text-white">{icon}</span>
+        <div className={`p-2 sm:p-3 rounded-lg ${color}`}>
+          <span className="material-icons-outlined text-white text-base sm:text-xl">{icon}</span>
         </div>
-        <div className="ml-4">
-          <h3 className="text-sm font-medium text-gray-500">{title}</h3>
-          <p className="text-xl font-bold text-gray-900">{value}</p>
+        <div className="ml-3 sm:ml-4">
+          <h3 className="text-xs sm:text-sm font-medium text-gray-500">{title}</h3>
+          <p className="text-lg sm:text-xl font-bold text-gray-900">{value}</p>
         </div>
       </div>
     </div>
@@ -201,19 +201,19 @@ const Dashboard: React.FC = () => {
     <div className="flex items-center text-sm bg-white rounded-lg shadow-sm">
       <button 
         onClick={handlePrevDay}
-        className="px-3 py-2 hover:bg-gray-50 rounded-l-lg transition-colors"
+        className="px-2 sm:px-3 py-2 hover:bg-gray-50 rounded-l-lg transition-colors"
         aria-label="Предыдущий день"
       >
         <span className="material-icons-outlined text-gray-500">chevron_left</span>
       </button>
       
-      <span className="px-3 py-2 font-medium">
+      <span className="px-2 sm:px-3 py-2 font-medium text-xs sm:text-sm truncate max-w-[130px] sm:max-w-none">
         {isToday(currentDate) ? 'Сегодня' : formatDate(currentDate)}
       </span>
       
       <button 
         onClick={handleNextDay}
-        className={`px-3 py-2 rounded-r-lg transition-colors ${
+        className={`px-2 sm:px-3 py-2 rounded-r-lg transition-colors ${
           isToday(currentDate) ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-50 text-gray-500'
         }`}
         disabled={isToday(currentDate)}
@@ -229,7 +229,7 @@ const Dashboard: React.FC = () => {
       <PageHeader title="Дашборд" actions={dateElement} />
       
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <SummaryCard
           title="Всего транзакций сегодня"
           value={`${totalDailyPayments}`}
@@ -250,14 +250,10 @@ const Dashboard: React.FC = () => {
         />
       </div>
       
-      {/* Card stats */}
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Состояние платежных карт</h2>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {mockCardStats.map(stats => (
-          <StatCard key={stats.id} stats={stats} />
+      {/* Bank cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+        {mockCardStats.map(card => (
+          <StatCard key={card.id} stats={card} />
         ))}
       </div>
     </div>

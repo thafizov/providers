@@ -92,9 +92,47 @@ const OrderStatusBadge: React.FC<{ status: Order['status'] }> = ({ status }) => 
   };
 
   return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status]}`}>
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${styles[status]}`}>
       {labels[status]}
     </span>
+  );
+};
+
+// Компонент для отображения карточки заказа на мобильных устройствах
+const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
+  const dateObj = new Date(order.date);
+  const formattedDate = dateObj.toLocaleDateString('ru-RU');
+  const formattedTime = dateObj.toLocaleTimeString('ru-RU', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-4 border-l-4 border-blue-500">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="font-semibold text-gray-800">{order.id}</h3>
+        <OrderStatusBadge status={order.status} />
+      </div>
+      
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <div className="text-gray-500 mb-1">Дата</div>
+          <div className="font-medium">
+            {formattedDate} <span className="text-gray-500">{formattedTime}</span>
+          </div>
+        </div>
+        
+        <div>
+          <div className="text-gray-500 mb-1">Карта</div>
+          <div className="font-medium">{order.bankName} {order.cardId}</div>
+        </div>
+        
+        <div className="col-span-2">
+          <div className="text-gray-500 mb-1">Сумма</div>
+          <div className="text-lg font-bold text-gray-900">{order.amount.toLocaleString('ru-RU')} ₽</div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -106,6 +144,7 @@ const Orders: React.FC = () => {
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleStatusFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusFilter(e.target.value as Order['status'] | 'all');
@@ -121,6 +160,10 @@ const Orders: React.FC = () => {
   
   const handleMaxAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxAmount(e.target.value);
+  };
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
   };
 
   const handleSort = (field: SortField) => {
@@ -193,7 +236,7 @@ const Orders: React.FC = () => {
   }, [statusFilter, minAmount, maxAmount, searchTerm, sortField, sortDirection]);
 
   const dateElement = (
-    <span className="text-sm text-gray-500 px-4 py-2 bg-white rounded-md">
+    <span className="text-xs sm:text-sm text-gray-500 px-3 py-2 bg-white rounded-md whitespace-nowrap">
       <span className="material-icons-outlined text-xs align-middle mr-1">calendar_today</span>
       Сегодня, {new Date().toLocaleDateString('ru-RU')}
     </span>
@@ -204,60 +247,71 @@ const Orders: React.FC = () => {
       <PageHeader title="Список ордеров" actions={dateElement} />
       
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
         <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center">
-            <div className="p-3 rounded-lg bg-blue-100">
-              <span className="material-icons-outlined text-blue-600">receipt_long</span>
+            <div className="p-2 sm:p-3 rounded-lg bg-blue-100">
+              <span className="material-icons-outlined text-blue-600 text-base sm:text-lg">receipt_long</span>
             </div>
-            <div className="ml-4">
-              <h3 className="text-sm font-medium text-gray-500">Всего заказов</h3>
-              <p className="text-lg font-bold text-gray-900">{mockOrders.length}</p>
+            <div className="ml-3 sm:ml-4">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Всего заказов</h3>
+              <p className="text-base sm:text-lg font-bold text-gray-900">{mockOrders.length}</p>
             </div>
           </div>
         </div>
         
         <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center">
-            <div className="p-3 rounded-lg bg-green-100">
-              <span className="material-icons-outlined text-green-600">check_circle</span>
+            <div className="p-2 sm:p-3 rounded-lg bg-green-100">
+              <span className="material-icons-outlined text-green-600 text-base sm:text-lg">check_circle</span>
             </div>
-            <div className="ml-4">
-              <h3 className="text-sm font-medium text-gray-500">Успешные / Неудачные</h3>
-              <p className="text-lg font-bold text-gray-900">{successfulOrdersCount} / {failedOrdersCount}</p>
+            <div className="ml-3 sm:ml-4">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Успешные / Неудачные</h3>
+              <p className="text-base sm:text-lg font-bold text-gray-900">{successfulOrdersCount} / {failedOrdersCount}</p>
             </div>
           </div>
         </div>
         
         <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center">
-            <div className="p-3 rounded-lg bg-purple-100">
-              <span className="material-icons-outlined text-purple-600">payments</span>
+            <div className="p-2 sm:p-3 rounded-lg bg-purple-100">
+              <span className="material-icons-outlined text-purple-600 text-base sm:text-lg">payments</span>
             </div>
-            <div className="ml-4">
-              <h3 className="text-sm font-medium text-gray-500">Общая сумма</h3>
-              <p className="text-lg font-bold text-gray-900">{ordersTotalAmount.toLocaleString('ru-RU')} ₽</p>
+            <div className="ml-3 sm:ml-4">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Общая сумма</h3>
+              <p className="text-base sm:text-lg font-bold text-gray-900">{ordersTotalAmount.toLocaleString('ru-RU')} ₽</p>
             </div>
           </div>
         </div>
       </div>
       
+      {/* Filter toggle for mobile */}
+      <div className="sm:hidden mb-4">
+        <button 
+          onClick={toggleFilters}
+          className="w-full flex items-center justify-center bg-white p-3 rounded-lg shadow-sm text-sm font-medium text-gray-700"
+        >
+          <span className="material-icons-outlined mr-2 text-gray-500">filter_list</span>
+          {showFilters ? 'Скрыть фильтры' : 'Показать фильтры'}
+        </button>
+      </div>
+      
       {/* Filters */}
-      <div className="mb-6 bg-white p-4 rounded-lg shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className={`mb-6 bg-white p-4 rounded-lg shadow-sm ${!showFilters ? 'hidden sm:block' : ''}`}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="search" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Поиск
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="material-icons-outlined text-gray-400 text-sm">search</span>
+                <span className="text-gray-500 material-icons-outlined" style={{ fontSize: '18px' }}>search</span>
               </div>
               <input
                 type="text"
                 id="search"
-                className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Номер заказа или карты"
+                className="block w-full pl-10 pr-3 py-2 sm:text-sm border border-gray-300 rounded-md"
+                placeholder="ID или карта"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
@@ -265,89 +319,92 @@ const Orders: React.FC = () => {
           </div>
           
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
-              Статус
+            <label htmlFor="status" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+              Статус платежа
             </label>
             <select
               id="status"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-none"
-              style={{ 
-                backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
-                backgroundPosition: 'right 0.5rem center',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '1.5em 1.5em',
-                paddingRight: '2.5rem'
-              }}
+              className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md"
               value={statusFilter}
               onChange={handleStatusFilterChange}
             >
               <option value="all">Все статусы</option>
-              <option value="success">Успешно</option>
-              <option value="failed">Ошибка</option>
+              <option value="success">Успешные</option>
+              <option value="failed">Неудачные</option>
               <option value="pending">В обработке</option>
             </select>
           </div>
           
           <div>
-            <label htmlFor="minAmount" className="block text-sm font-medium text-gray-700 mb-1">
-              Минимальная сумма
+            <label htmlFor="min-amount" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+              Мин. сумма (₽)
             </label>
-            <div className="relative">
-              <input
-                type="number"
-                id="minAmount"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="От"
-                value={minAmount}
-                onChange={handleMinAmountChange}
-              />
-            </div>
+            <input
+              type="number"
+              id="min-amount"
+              className="block w-full pl-3 pr-3 py-2 sm:text-sm border border-gray-300 rounded-md"
+              placeholder="От"
+              value={minAmount}
+              onChange={handleMinAmountChange}
+            />
           </div>
           
           <div>
-            <label htmlFor="maxAmount" className="block text-sm font-medium text-gray-700 mb-1">
-              Максимальная сумма
+            <label htmlFor="max-amount" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
+              Макс. сумма (₽)
             </label>
-            <div className="relative">
-              <input
-                type="number"
-                id="maxAmount"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="До"
-                value={maxAmount}
-                onChange={handleMaxAmountChange}
-              />
-            </div>
+            <input
+              type="number"
+              id="max-amount"
+              className="block w-full pl-3 pr-3 py-2 sm:text-sm border border-gray-300 rounded-md"
+              placeholder="До"
+              value={maxAmount}
+              onChange={handleMaxAmountChange}
+            />
           </div>
         </div>
       </div>
       
-      {/* Orders table */}
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+      {/* Mobile view of orders */}
+      <div className="sm:hidden space-y-4 mb-6">
+        {filteredOrders.length === 0 ? (
+          <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <span className="material-icons-outlined text-4xl text-gray-400 mb-2">search_off</span>
+            <p className="text-gray-500">Не найдено ордеров, соответствующих фильтрам</p>
+          </div>
+        ) : (
+          filteredOrders.map(order => (
+            <OrderCard key={order.id} order={order} />
+          ))
+        )}
+      </div>
+      
+      {/* Desktop view - table */}
+      <div className="hidden sm:block bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th
-                  scope="col"
+                <th 
+                  scope="col" 
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('id')}
                 >
                   <div className="flex items-center">
-                    <span>ID</span>
-                    <span className="material-icons-outlined text-gray-400 ml-1 text-sm">
+                    ID Ордера
+                    <span className="material-icons-outlined ml-1 text-gray-400" style={{ fontSize: '16px' }}>
                       {getSortIcon('id')}
                     </span>
                   </div>
                 </th>
-                <th
-                  scope="col"
+                <th 
+                  scope="col" 
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('date')}
                 >
                   <div className="flex items-center">
-                    <span>Дата</span>
-                    <span className="material-icons-outlined text-gray-400 ml-1 text-sm">
+                    Дата
+                    <span className="material-icons-outlined ml-1 text-gray-400" style={{ fontSize: '16px' }}>
                       {getSortIcon('date')}
                     </span>
                   </div>
@@ -355,14 +412,14 @@ const Orders: React.FC = () => {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Карта
                 </th>
-                <th
-                  scope="col"
+                <th 
+                  scope="col" 
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('amount')}
                 >
                   <div className="flex items-center">
-                    <span>Сумма</span>
-                    <span className="material-icons-outlined text-gray-400 ml-1 text-sm">
+                    Сумма
+                    <span className="material-icons-outlined ml-1 text-gray-400" style={{ fontSize: '16px' }}>
                       {getSortIcon('amount')}
                     </span>
                   </div>
@@ -370,44 +427,49 @@ const Orders: React.FC = () => {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Статус
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Способ оплаты
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    {order.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.bankName} {order.cardId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {order.amount.toLocaleString('ru-RU')} ₽
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <OrderStatusBadge status={order.status} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    QR-код
+              {filteredOrders.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
+                    Не найдено ордеров, соответствующих фильтрам
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredOrders.map((order) => {
+                  const dateObj = new Date(order.date);
+                  const formattedDate = dateObj.toLocaleDateString('ru-RU');
+                  const formattedTime = dateObj.toLocaleTimeString('ru-RU', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                  });
+                  
+                  return (
+                    <tr key={order.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{order.id}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{formattedDate}</div>
+                        <div className="text-sm text-gray-500">{formattedTime}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{order.bankName} {order.cardId}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-semibold text-gray-900">{order.amount.toLocaleString('ru-RU')} ₽</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <OrderStatusBadge status={order.status} />
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
-        
-        {filteredOrders.length === 0 && (
-          <div className="py-8 text-center text-gray-500">
-            <span className="material-icons-outlined text-gray-300 text-4xl">search_off</span>
-            <p className="mt-2">Нет ордеров, соответствующих фильтрам</p>
-          </div>
-        )}
       </div>
     </div>
   );

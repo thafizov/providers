@@ -5,15 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Перенаправление | Providers CSBP</title>
   <script>
-    // Перенаправление на главную страницу с хешем
-    window.location.replace("./");
+    // Сохраняем путь для правильного перенаправления в HashRouter
+    const path = window.location.pathname.split('/providers')[1];
+    // Если есть путь, сохраняем его в sessionStorage
+    if (path) {
+      sessionStorage.setItem('redirectPath', path);
+    }
+    // Перенаправляем на главную страницу
+    window.location.href = window.location.origin + '/providers/';
   </script>
 </head>
 <body>
   <div style="display: flex; height: 100vh; align-items: center; justify-content: center; text-align: center; font-family: Arial, sans-serif;">
     <div>
       <h1>Перенаправление...</h1>
-      <p>Если вы не были перенаправлены автоматически, <a href="./">нажмите здесь</a>.</p>
+      <p>Если вы не были перенаправлены автоматически, <a href="/providers/">нажмите здесь</a>.</p>
     </div>
   </div>
 </body>

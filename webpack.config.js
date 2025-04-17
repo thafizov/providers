@@ -59,7 +59,7 @@ module.exports = (env, argv) => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './public/index.html',
-        favicon: './public/favicon.ico',
+        favicon: './public/favicon.svg',
         publicPath: publicPath,
         minify: {
           removeComments: true,
@@ -80,7 +80,7 @@ module.exports = (env, argv) => {
             from: 'public',
             to: '',
             globOptions: {
-              ignore: ['**/index.html', '**/favicon.ico']
+              ignore: ['**/index.html', '**/favicon.ico', '**/favicon.svg']
             }
           }
         ]

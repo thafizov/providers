@@ -82,30 +82,30 @@ const Layout: React.FC = () => {
         </div>
         
         <div className="flex items-center">
-          <div className="flex items-center p-2 rounded-full bg-gray-100">
+          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600">
             <span className="material-icons-outlined">account_circle</span>
           </div>
         </div>
       </div>
       
       {/* Sidebar */}
-      <div className={`fixed inset-0 md:relative md:inset-auto md:translate-x-0 md:w-64 bg-white shadow-lg md:shadow-md flex flex-col z-10 transition-transform duration-300 ${
+      <div className={`fixed inset-0 md:relative md:inset-auto md:translate-x-0 md:w-64 bg-white shadow-lg md:shadow-md flex flex-col z-10 transition-transform duration-300 md:h-screen overflow-y-auto ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex-1 p-4">
           {/* Logo and User Profile - Desktop */}
-          <div className="hidden md:flex justify-center mb-8">
-            <img src="/logo.svg" alt="Providers CSBP Logo" className="h-14" />
+          <div className="hidden md:flex justify-between items-center mb-6">
+            <img src="/logo.svg" alt="Providers CSBP Logo" className="h-10" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600">
+              <span className="material-icons-outlined">account_circle</span>
+            </div>
           </div>
           
           {/* User info */}
-          <div className="mb-8 p-5 bg-gray-50 rounded-xl">
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center mb-3">
-              <div className="p-2 mr-3 rounded-full bg-blue-100 text-blue-600">
-                <span className="material-icons-outlined">account_circle</span>
-              </div>
               <div>
-                <div className="text-sm font-medium">username@example.com</div>
+                <div className="text-sm font-medium truncate max-w-[180px]">username@example.com</div>
                 <div className="text-xs text-gray-500">ID: 12345678</div>
               </div>
             </div>
@@ -167,7 +167,7 @@ const Layout: React.FC = () => {
       )}
       
       {/* Main content with transition */}
-      <div className="flex-1 overflow-auto p-4 md:p-8 md:h-screen">
+      <div className="flex-1 overflow-auto p-4 md:p-6 md:h-screen">
         <div
           className={`transition-opacity duration-300 ease-in-out ${
             transitionStage === 'fadeIn' ? 'opacity-100' : 'opacity-0'

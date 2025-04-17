@@ -4,10 +4,10 @@ import PageHeader from '../components/PageHeader';
 interface Order {
   id: string;
   date: string;
-  cardNumber: string;
+  cardId: string;
+  bankName: string;
   amount: number;
   status: 'success' | 'failed' | 'pending';
-  paymentMethod: string;
 }
 
 // Примерные данные для демонстрации
@@ -15,58 +15,58 @@ const mockOrders: Order[] = [
   {
     id: 'ORD-001234',
     date: '2025-04-17 09:25:43',
-    cardNumber: '•••• •••• •••• 1234',
+    cardId: '1278',
+    bankName: 'Сбер',
     amount: 4500,
     status: 'success',
-    paymentMethod: 'Visa',
   },
   {
     id: 'ORD-001235',
     date: '2025-04-17 10:15:22',
-    cardNumber: '•••• •••• •••• 5678',
+    cardId: '5678',
+    bankName: 'Альфа',
     amount: 12800,
     status: 'failed',
-    paymentMethod: 'MasterCard',
   },
   {
     id: 'ORD-001236',
     date: '2025-04-17 11:05:57',
-    cardNumber: '•••• •••• •••• 9012',
+    cardId: '9012',
+    bankName: 'Тинькофф',
     amount: 7650,
     status: 'pending',
-    paymentMethod: 'MIR',
   },
   {
     id: 'ORD-001237',
     date: '2025-04-17 12:32:10',
-    cardNumber: '•••• •••• •••• 3456',
+    cardId: '3456',
+    bankName: 'ВТБ',
     amount: 19200,
     status: 'success',
-    paymentMethod: 'Visa',
   },
   {
     id: 'ORD-001238',
     date: '2025-04-17 13:45:33',
-    cardNumber: '•••• •••• •••• 1234',
+    cardId: '1278',
+    bankName: 'Сбер',
     amount: 3100,
     status: 'success',
-    paymentMethod: 'MasterCard',
   },
   {
     id: 'ORD-001239',
     date: '2025-04-17 14:20:15',
-    cardNumber: '•••• •••• •••• 5678',
+    cardId: '5678',
+    bankName: 'Альфа',
     amount: 8900,
     status: 'failed',
-    paymentMethod: 'MIR',
   },
   {
     id: 'ORD-001240',
     date: '2025-04-17 15:10:48',
-    cardNumber: '•••• •••• •••• 9012',
+    cardId: '9012',
+    bankName: 'Тинькофф',
     amount: 5400,
     status: 'pending',
-    paymentMethod: 'Visa',
   },
 ];
 
@@ -100,8 +100,9 @@ const OrderStatusBadge: React.FC<{ status: Order['status'] }> = ({ status }) => 
 
 const Orders: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<Order['status'] | 'all'>('all');
-  const [paymentMethodFilter, setPaymentMethodFilter] = useState<string | 'all'>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [minAmount, setMinAmount] = useState('');
+  const [maxAmount, setMaxAmount] = useState('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -110,12 +111,16 @@ const Orders: React.FC = () => {
     setStatusFilter(e.target.value as Order['status'] | 'all');
   };
 
-  const handlePaymentMethodFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPaymentMethodFilter(e.target.value);
-  };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+  
+  const handleMinAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMinAmount(e.target.value);
+  };
+  
+  const handleMaxAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxAmount(e.target.value);
   };
 
   const handleSort = (field: SortField) => {
@@ -145,9 +150,19 @@ const Orders: React.FC = () => {
       result = result.filter(order => order.status === statusFilter);
     }
     
-    // Filter by payment method
-    if (paymentMethodFilter !== 'all') {
-      result = result.filter(order => order.paymentMethod === paymentMethodFilter);
+    // Filter by amount
+    if (minAmount) {
+      const min = parseInt(minAmount, 10);
+      if (!isNaN(min)) {
+        result = result.filter(order => order.amount >= min);
+      }
+    }
+    
+    if (maxAmount) {
+      const max = parseInt(maxAmount, 10);
+      if (!isNaN(max)) {
+        result = result.filter(order => order.amount <= max);
+      }
     }
     
     // Search
@@ -155,7 +170,7 @@ const Orders: React.FC = () => {
       const term = searchTerm.toLowerCase();
       result = result.filter(order => 
         order.id.toLowerCase().includes(term) || 
-        order.cardNumber.toLowerCase().includes(term)
+        `${order.bankName} ${order.cardId}`.toLowerCase().includes(term)
       );
     }
 
@@ -175,10 +190,7 @@ const Orders: React.FC = () => {
     });
 
     setFilteredOrders(result);
-  }, [statusFilter, paymentMethodFilter, searchTerm, sortField, sortDirection]);
-
-  // Получаем уникальные методы оплаты
-  const paymentMethods = Array.from(new Set(mockOrders.map(order => order.paymentMethod)));
+  }, [statusFilter, minAmount, maxAmount, searchTerm, sortField, sortDirection]);
 
   const dateElement = (
     <span className="text-sm text-gray-500 px-4 py-2 bg-white rounded-md">
@@ -232,7 +244,7 @@ const Orders: React.FC = () => {
       
       {/* Filters */}
       <div className="mb-6 bg-white p-4 rounded-lg shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
               Поиск
@@ -253,12 +265,19 @@ const Orders: React.FC = () => {
           </div>
           
           <div>
-            <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
               Статус
             </label>
             <select
-              id="status-filter"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              id="status"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-none"
+              style={{ 
+                backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem'
+              }}
               value={statusFilter}
               onChange={handleStatusFilterChange}
             >
@@ -270,20 +289,35 @@ const Orders: React.FC = () => {
           </div>
           
           <div>
-            <label htmlFor="payment-method-filter" className="block text-sm font-medium text-gray-700 mb-1">
-              Метод оплаты
+            <label htmlFor="minAmount" className="block text-sm font-medium text-gray-700 mb-1">
+              Минимальная сумма
             </label>
-            <select
-              id="payment-method-filter"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              value={paymentMethodFilter}
-              onChange={handlePaymentMethodFilterChange}
-            >
-              <option value="all">Все методы</option>
-              {paymentMethods.map(method => (
-                <option key={method} value={method}>{method}</option>
-              ))}
-            </select>
+            <div className="relative">
+              <input
+                type="number"
+                id="minAmount"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="От"
+                value={minAmount}
+                onChange={handleMinAmountChange}
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label htmlFor="maxAmount" className="block text-sm font-medium text-gray-700 mb-1">
+              Максимальная сумма
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                id="maxAmount"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="До"
+                value={maxAmount}
+                onChange={handleMaxAmountChange}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -294,123 +328,84 @@ const Orders: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th 
+                <th
+                  scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('id')}
                 >
-                  <div className="flex items-center space-x-1">
-                    <span>ID заказа</span>
-                    <span className="material-icons-outlined text-gray-400 text-sm">{getSortIcon('id')}</span>
+                  <div className="flex items-center">
+                    <span>ID</span>
+                    <span className="material-icons-outlined text-gray-400 ml-1 text-sm">
+                      {getSortIcon('id')}
+                    </span>
                   </div>
                 </th>
-                <th 
+                <th
+                  scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('date')}
                 >
-                  <div className="flex items-center space-x-1">
-                    <span>Дата и время</span>
-                    <span className="material-icons-outlined text-gray-400 text-sm">{getSortIcon('date')}</span>
+                  <div className="flex items-center">
+                    <span>Дата</span>
+                    <span className="material-icons-outlined text-gray-400 ml-1 text-sm">
+                      {getSortIcon('date')}
+                    </span>
                   </div>
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Номер карты
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Карта
                 </th>
-                <th 
+                <th
+                  scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('amount')}
                 >
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center">
                     <span>Сумма</span>
-                    <span className="material-icons-outlined text-gray-400 text-sm">{getSortIcon('amount')}</span>
+                    <span className="material-icons-outlined text-gray-400 ml-1 text-sm">
+                      {getSortIcon('amount')}
+                    </span>
                   </div>
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Статус
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Метод оплаты
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Способ оплаты
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredOrders.length > 0 ? (
-                filteredOrders.map(order => (
-                  <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                      {order.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.date}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.cardNumber}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                      {order.amount.toLocaleString('ru-RU')} ₽
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <OrderStatusBadge status={order.status} />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.paymentMethod}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
-                    Заказы не найдены
+              {filteredOrders.map((order) => (
+                <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                    {order.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {order.date}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {order.bankName} {order.cardId}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {order.amount.toLocaleString('ru-RU')} ₽
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <OrderStatusBadge status={order.status} />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    QR-код
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
         
-        {/* Pagination */}
-        {filteredOrders.length > 0 && (
-          <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
-            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-              <div className="text-sm text-gray-700">
-                Показано <span className="font-medium">{filteredOrders.length}</span> из <span className="font-medium">{mockOrders.length}</span> заказов
-              </div>
-              <div>
-                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
-                    <span className="sr-only">Предыдущая</span>
-                    <span className="material-icons-outlined text-sm">chevron_left</span>
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    1
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600 hover:bg-gray-50"
-                  >
-                    2
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    3
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
-                    <span className="sr-only">Следующая</span>
-                    <span className="material-icons-outlined text-sm">chevron_right</span>
-                  </a>
-                </nav>
-              </div>
-            </div>
+        {filteredOrders.length === 0 && (
+          <div className="py-8 text-center text-gray-500">
+            <span className="material-icons-outlined text-gray-300 text-4xl">search_off</span>
+            <p className="mt-2">Нет ордеров, соответствующих фильтрам</p>
           </div>
         )}
       </div>

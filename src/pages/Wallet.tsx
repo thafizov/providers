@@ -14,36 +14,36 @@ const mockTransactions: Transaction[] = [
   {
     id: '1',
     date: '2023-10-15T14:32:10',
-    amount: '0.25 BTC',
-    txHash: '0x7d5a98e268f1652a7c3dce32c7d472c92a6c3edb2bbc92ccaf35795a9d7c3b27',
+    amount: '1250 USDT',
+    txHash: 'mFgXHXS6vYfgZx5D5QQ5pQVc5cPkCR5p8WJ4pYbmtm8=',
     status: 'completed'
   },
   {
     id: '2',
     date: '2023-10-14T09:18:45',
-    amount: '0.75 ETH',
-    txHash: '0x8f72d5e4a117fdc29e19463c6eb7b36c4ac752ef0b92634e90310287a8774723',
+    amount: '750 USDT',
+    txHash: 'jjjnAYC525wk6y56YPF5aeD9VdKV82sshZQS7MrXXSA=',
     status: 'completed'
   },
   {
     id: '3',
     date: '2023-10-12T16:45:22',
-    amount: '1.2 ETH',
-    txHash: '0x3b5d4e25f21edf3b48c29c6712dd8f6ba42d46cc12be8541de798fdff70b3827',
+    amount: '1200 USDT',
+    txHash: 'TfKXS5KnXf3kvbOY5ygL51r8Uf3GiJTJU6ZcAjsUMcw=',
     status: 'pending'
   },
   {
     id: '4',
     date: '2023-10-10T11:55:37',
-    amount: '0.12 BTC',
-    txHash: '0x1a8b4e270f64fcb26e7d5e4c9c61e26f16e78932a72d95db15e451a6278fa52d',
+    amount: '120 USDT',
+    txHash: 'qf9YLNr56feAptWKwJ3wr77VEzNbHKCkL6e8C3aHcZ8=',
     status: 'completed'
   },
   {
     id: '5',
     date: '2023-10-08T08:25:19',
-    amount: '0.5 ETH',
-    txHash: '0x4c9a78e261c53df9efb523f64a3b1b6c1e5b5963c18ab99f5d8712de57c74621',
+    amount: '500 USDT',
+    txHash: 'YLr9GJTjLcKD9v5Xjs2pmKxZLPgcabsvBNp3pw3HN4U=',
     status: 'failed'
   }
 ];
@@ -65,7 +65,7 @@ const WalletAddressCard: React.FC<{ address: string }> = ({ address }) => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
+    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
       <div className="absolute -right-10 -top-10 opacity-10">
         <span className="material-icons-outlined text-9xl">account_balance_wallet</span>
       </div>
@@ -97,10 +97,10 @@ const WalletAddressCard: React.FC<{ address: string }> = ({ address }) => {
       
       <div className="flex justify-between text-sm">
         <div>
-          <span className="text-blue-200">Сеть:</span> <span className="font-semibold">Bitcoin</span>
+          <span className="text-blue-200">Сеть:</span> <span className="font-semibold">TON</span>
         </div>
         <div>
-          <span className="text-blue-200">Тип:</span> <span className="font-semibold">Segwit</span>
+          <span className="text-blue-200">Валюта:</span> <span className="font-semibold">USDT</span>
         </div>
       </div>
     </div>
@@ -145,7 +145,7 @@ const TransactionRow: React.FC<{ transaction: Transaction }> = ({ transaction })
             {transaction.txHash}
           </span>
           <a 
-            href={`https://etherscan.io/tx/${transaction.txHash}`} 
+            href={`https://tonscan.org/tx/${transaction.txHash}`} 
             target="_blank"
             rel="noopener noreferrer"
             className="ml-2 text-blue-500 hover:text-blue-700"
@@ -165,8 +165,8 @@ const TransactionRow: React.FC<{ transaction: Transaction }> = ({ transaction })
 };
 
 const Wallet: React.FC = () => {
-  // Адрес кошелька (в реальном приложении будет приходить с бэкенда)
-  const walletAddress = '3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5';
+  // Адрес кошелька TON
+  const walletAddress = 'EQBIhPuWmjT7fP-VomuTWnW-5RMDAQkWDFv_X4GGmNDQCCnW';
   
   return (
     <div>

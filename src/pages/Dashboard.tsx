@@ -59,64 +59,62 @@ const avgSuccessRate = Math.round(
 );
 
 // Цвета для карточек разных банков
-const bankColors: Record<string, { bg: string, accent: string, pattern: string }> = {
+const bankColors: Record<string, { bg: string, accent: string, logo: string }> = {
   'Сбер': { 
-    bg: 'from-green-500 to-green-700',
-    accent: 'bg-green-400',
-    pattern: 'bg-green-600'
+    bg: 'from-green-50 to-green-100',
+    accent: 'bg-green-500',
+    logo: 'bg-green-600'
   },
   'Альфа': { 
-    bg: 'from-red-500 to-red-700',
-    accent: 'bg-red-400',
-    pattern: 'bg-red-600'
+    bg: 'from-red-50 to-red-100',
+    accent: 'bg-red-500',
+    logo: 'bg-red-600'
   },
   'Тинькофф': { 
-    bg: 'from-yellow-500 to-yellow-700',
-    accent: 'bg-yellow-400',
-    pattern: 'bg-yellow-600'
+    bg: 'from-yellow-50 to-yellow-100',
+    accent: 'bg-yellow-500',
+    logo: 'bg-yellow-600'
   },
   'ВТБ': { 
-    bg: 'from-blue-500 to-blue-700',
-    accent: 'bg-blue-400',
-    pattern: 'bg-blue-600'
+    bg: 'from-blue-50 to-blue-100',
+    accent: 'bg-blue-500',
+    logo: 'bg-blue-600'
   },
 };
 
 const StatCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
   const colors = bankColors[stats.bankName] || { 
-    bg: 'from-gray-500 to-gray-700',
-    accent: 'bg-gray-400',
-    pattern: 'bg-gray-600'
+    bg: 'from-gray-50 to-gray-100',
+    accent: 'bg-gray-500',
+    logo: 'bg-gray-600'
   };
   
   return (
-    <div className={`bg-gradient-to-br ${colors.bg} rounded-2xl shadow-md overflow-hidden h-full transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
-      {/* Декоративные элементы для стиля банковской карты */}
-      <div className="absolute top-3 right-3 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm"></div>
-      <div className="absolute bottom-16 left-4 w-10 h-6 rounded-md bg-white/20 backdrop-blur-sm"></div>
-      <div className={`absolute -bottom-8 -right-8 w-32 h-32 rounded-full ${colors.pattern} opacity-10`}></div>
-      
-      <div className="p-6 h-full flex flex-col">
-        <div className="mb-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white">
+    <div className={`bg-gradient-to-br ${colors.bg} rounded-xl shadow-sm overflow-hidden h-full transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-gray-100`}>
+      <div className="p-5 h-full flex flex-col">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <div className={`flex items-center justify-center w-8 h-8 rounded-md text-white ${colors.logo} mr-3`}>
+              {stats.bankName.charAt(0)}
+            </div>
+            <h3 className="text-lg font-semibold text-gray-800">
               {stats.bankName} {stats.cardId}
             </h3>
-            <span className={`px-3 py-1 ${colors.accent} text-white text-xs font-medium rounded-full`}>
-              {stats.dailyPayments} платежей
-            </span>
           </div>
+          <span className={`px-2 py-1 ${colors.accent} text-white text-xs font-medium rounded-md`}>
+            {stats.dailyPayments} платежей
+          </span>
         </div>
         
-        <div className="space-y-4 mb-6 z-10">
+        <div className="space-y-4 mb-5">
           <div className="relative pt-1">
             <div className="flex items-center justify-between mb-1">
-              <div className="text-xs font-medium text-white/70">Успешные</div>
-              <div className="text-xs font-semibold text-white">{stats.successRate}%</div>
+              <div className="text-xs font-medium text-gray-500">Успешные</div>
+              <div className="text-xs font-semibold text-green-600">{stats.successRate}%</div>
             </div>
-            <div className="overflow-hidden h-2 text-xs flex rounded bg-black/20">
+            <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-100">
               <div 
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-white/40"
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
                 style={{ width: `${stats.successRate}%` }}
               ></div>
             </div>
@@ -124,21 +122,21 @@ const StatCard: React.FC<{ stats: CardStats }> = ({ stats }) => {
           
           <div className="relative pt-1">
             <div className="flex items-center justify-between mb-1">
-              <div className="text-xs font-medium text-white/70">Неудачные</div>
-              <div className="text-xs font-semibold text-white">{stats.failedRate}%</div>
+              <div className="text-xs font-medium text-gray-500">Неудачные</div>
+              <div className="text-xs font-semibold text-red-600">{stats.failedRate}%</div>
             </div>
-            <div className="overflow-hidden h-2 text-xs flex rounded bg-black/20">
+            <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-100">
               <div 
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-white/20"
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
                 style={{ width: `${stats.failedRate}%` }}
               ></div>
             </div>
           </div>
         </div>
         
-        <div className="mt-auto pt-4 border-t border-white/20">
-          <div className="text-sm text-white/70 mb-1">Текущий баланс</div>
-          <div className="text-2xl font-bold text-white">
+        <div className="mt-auto pt-5 border-t border-gray-200">
+          <div className="text-sm text-gray-500 mb-1">Текущий баланс</div>
+          <div className="text-2xl font-bold text-gray-900">
             {stats.balance.toLocaleString('ru-RU')} ₽
           </div>
         </div>

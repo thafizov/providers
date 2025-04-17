@@ -9,7 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'static/js/[name].[contenthash:8].js',
     chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
-    publicPath: isProduction ? '/providers/' : '/',
+    publicPath: isProduction ? './' : '/',
     clean: true
   },
   resolve: {

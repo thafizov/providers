@@ -65,25 +65,25 @@ const WalletAddressCard: React.FC<{ address: string }> = ({ address }) => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
-      <div className="absolute -right-10 -top-10 opacity-10">
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-100 rounded-2xl shadow-sm p-6 text-gray-800 relative overflow-hidden border border-blue-200">
+      <div className="absolute -right-10 -top-10 opacity-5">
         <span className="material-icons-outlined text-9xl">account_balance_wallet</span>
       </div>
-      <h3 className="text-xl font-bold mb-1">Адрес вашего кошелька</h3>
-      <p className="text-blue-100 text-sm mb-4">Используйте этот адрес для получения средств</p>
+      <h3 className="text-xl font-bold mb-1 text-blue-800">Адрес вашего кошелька</h3>
+      <p className="text-gray-600 text-sm mb-4">Используйте этот адрес для получения средств</p>
       
-      <div className="bg-black/30 p-4 rounded-xl backdrop-blur-sm flex items-center justify-between mb-4 relative">
-        <div className="font-mono text-sm md:text-base overflow-hidden text-ellipsis">
+      <div className="bg-white p-4 rounded-xl shadow-sm flex items-center justify-between mb-4 relative border border-blue-100">
+        <div className="font-mono text-sm md:text-base overflow-hidden text-ellipsis text-gray-700">
           {address}
         </div>
         <button 
           onClick={handleCopyAddress}
           onKeyDown={handleKeyDown}
-          className="ml-2 bg-white/20 hover:bg-white/30 p-2 rounded-lg backdrop-blur-sm transition-all duration-200"
+          className="ml-2 bg-blue-100 hover:bg-blue-200 p-2 rounded-lg transition-all duration-200 text-blue-600"
           aria-label="Копировать адрес кошелька"
           tabIndex={0}
         >
-          <span className="material-icons-outlined text-white">
+          <span className="material-icons-outlined">
             {isCopied ? 'check' : 'content_copy'}
           </span>
         </button>
@@ -97,10 +97,10 @@ const WalletAddressCard: React.FC<{ address: string }> = ({ address }) => {
       
       <div className="flex justify-between text-sm">
         <div>
-          <span className="text-blue-200">Сеть:</span> <span className="font-semibold">TON</span>
+          <span className="text-gray-600">Сеть:</span> <span className="font-semibold text-blue-700">TON</span>
         </div>
         <div>
-          <span className="text-blue-200">Валюта:</span> <span className="font-semibold">USDT</span>
+          <span className="text-gray-600">Валюта:</span> <span className="font-semibold text-blue-700">USDT</span>
         </div>
       </div>
     </div>

@@ -324,7 +324,7 @@ const Orders: React.FC = () => {
             </label>
             <select
               id="status"
-              className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md"
+              className="block w-full pl-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm min-h-ios focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               value={statusFilter}
               onChange={handleStatusFilterChange}
             >

@@ -223,4 +223,48 @@ button:focus-visible, a:focus-visible {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
+
+/* Стилизация для селектов, особенно на iOS */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.25em 1.25em;
+  padding-right: 2.5rem !important;
+}
+
+/* На iOS часто появляется специфическая обводка */
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+/* Исправления внешнего вида для iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  select {
+    font-size: 16px !important; /* Предотвращает автоматический зум на iOS */
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    border-radius: 0.375rem;
+  }
+  
+  /* Минимальная высота для селектов на iOS */
+  select.min-h-ios {
+    min-height: 42px;
+  }
+  
+  /* Улучшения для текстовых полей */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"] {
+    font-size: 16px !important; /* Предотвращает автоматический зум на iOS */
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
 } 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <circle fill="#3B82F6" cx="100" cy="100" r="90"></circle>
+    <path d="M60,70 L140,70 C145.522847,70 150,74.4771525 150,80 L150,130 C150,135.522847 145.522847,140 140,140 L60,140 C54.4771525,140 50,135.522847 50,130 L50,80 C50,74.4771525 54.4771525,70 60,70 Z" fill="#FFFFFF"></path>
+    <rect fill="#3B82F6" x="65" y="90" width="70" height="10" rx="5"></rect>
+    <rect fill="#3B82F6" x="65" y="110" width="40" height="10" rx="5"></rect>
+  </g>
+</svg> 
